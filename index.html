@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Reference Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .icon-card:hover .copy-btn { opacity: 1; }
+        .tab-active { border-b-2 border-blue-600 text-blue-600; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen font-sans">
+
+    <div class="max-w-6xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                <i data-lucide="shapes" class="text-blue-600"></i>
+                Icon Resource Hub
+            </h1>
+            <p class="text-gray-600">Quick reference for Lucide icons, SVGs, and implementation patterns.</p>
+        </header>
+
+        <!-- Search and Filter -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mb-8">
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="relative flex-1 w-full">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+                    <input 
+                        type="text" 
+                        id="iconSearch" 
+                        placeholder="Search icons (e.g. user, heart, settings...)" 
+                        class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    >
+                </div>
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button onclick="filterCategory('all')" class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-medium">All</button>
+                    <button onclick="filterCategory('ui')" class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-medium">UI</button>
+                    <button onclick="filterCategory('media')" class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-medium">Media</button>
+                    <button onclick="filterCategory('arrow')" class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-medium">Arrows</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div id="iconGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <!-- Icons will be injected here -->
+        </div>
+
+        <!-- Documentation Section -->
+        <section class="mt-16 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                <h2 class="text-xl font-semibold flex items-center gap-2">
+                    <i data-lucide="code-2" class="w-5 h-5"></i>
+                    Implementation Guide
+                </h2>
+            </div>
+            <div class="p-6 space-y-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-3">1. Lucide (Recommended)</h3>
+                    <p class="text-gray-600 mb-4 text-sm">Include the script in your head, then use data attributes.</p>
+                    <pre class="bg-gray-900 text-gray-100 p-4 rounded-xl overflow-x-auto text-sm"><code>&lt;script src="https://unpkg.com/lucide@latest"&gt;&lt;/script&gt;
+&lt;i data-lucide="camera"&gt;&lt;/i&gt;
+&lt;script&gt;lucide.createIcons();&lt;/script&gt;</code></pre>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-lg mb-3">2. Raw SVG Pattern</h3>
+                    <p class="text-gray-600 mb-4 text-sm">Best for performance and full control over styling.</p>
+                    <pre class="bg-gray-900 text-gray-100 p-4 rounded-xl overflow-x-auto text-sm"><code>&lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"&gt;
+  &lt;circle cx="12" cy="12" r="10"&gt;&lt;/circle&gt;
+  &lt;path d="m16 12-4-4-4 4"&gt;&lt;/path&gt;
+  &lt;path d="M12 16V8"&gt;&lt;/path&gt;
+&lt;/svg&gt;</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-xl opacity-0 transition-opacity pointer-events-none z-50">
+            Copied to clipboard!
+        </div>
+    </div>
+
+    <script>
+        const icons = [
+            { name: 'user', category: 'ui' }, { name: 'settings', category: 'ui' }, { name: 'search', category: 'ui' },
+            { name: 'home', category: 'ui' }, { name: 'mail', category: 'ui' }, { name: 'bell', category: 'ui' },
+            { name: 'camera', category: 'media' }, { name: 'play', category: 'media' }, { name: 'music', category: 'media' },
+            { name: 'image', category: 'media' }, { name: 'video', category: 'media' }, { name: 'mic', category: 'media' },
+            { name: 'arrow-right', category: 'arrow' }, { name: 'arrow-left', category: 'arrow' }, { name: 'chevron-up', category: 'arrow' },
+            { name: 'chevron-down', category: 'arrow' }, { name: 'external-link', category: 'ui' }, { name: 'menu', category: 'ui' },
+            { name: 'trash-2', category: 'ui' }, { name: 'edit', category: 'ui' }, { name: 'check', category: 'ui' },
+            { name: 'x', category: 'ui' }, { name: 'plus', category: 'ui' }, { name: 'minus', category: 'ui' },
+            { name: 'heart', category: 'ui' }, { name: 'star', category: 'ui' }, { name: 'share-2', category: 'ui' },
+            { name: 'download', category: 'ui' }, { name: 'upload', category: 'ui' }, { name: 'refresh-cw', category: 'ui' }
+        ];
+
+        function renderIcons(filter = '', category = 'all') {
+            const grid = document.getElementById('iconGrid');
+            grid.innerHTML = '';
+            
+            const filtered = icons.filter(icon => {
+                const matchesSearch = icon.name.toLowerCase().includes(filter.toLowerCase());
+                const matchesCategory = category === 'all' || icon.category === category;
+                return matchesSearch && matchesCategory;
+            });
+
+            filtered.forEach(icon => {
+                const card = document.createElement('div');
+                card.className = 'icon-card group bg-white p-6 rounded-xl border border-gray-200 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer flex flex-col items-center justify-center gap-3 text-center';
+                card.onclick = () => copyIcon(icon.name);
+                
+                card.innerHTML = `
+                    <div class="text-gray-700 group-hover:text-blue-600 transition-colors">
+                        <i data-lucide="${icon.name}" class="w-8 h-8"></i>
+                    </div>
+                    <span class="text-xs font-mono text-gray-500 group-hover:text-blue-500">${icon.name}</span>
+                `;
+                grid.appendChild(card);
+            });
+            
+            lucide.createIcons();
+        }
+
+        function copyIcon(name) {
+            const code = `<i data-lucide="${name}"></i>`;
+            const textArea = document.createElement('textarea');
+            textArea.value = code;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            const toast = document.getElementById('toast');
+            toast.innerText = `Copied: <i data-lucide="${name}"></i>`;
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+        }
+
+        function filterCategory(cat) {
+            renderIcons(document.getElementById('iconSearch').value, cat);
+        }
+
+        document.getElementById('iconSearch').addEventListener('input', (e) => {
+            renderIcons(e.target.value);
+        });
+
+        // Initialize
+        window.onload = () => {
+            renderIcons();
+        };
+    </script>
+</body>
+</html>
